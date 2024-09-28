@@ -95,7 +95,7 @@ const pets = [
         matchingPets = matchingPets.filter((pet) => pet.breed === breed);
       }
       if (gender) {
-        matchingPets = matchingPets.filter((pet) => pet.breed === gender);
+        matchingPets = matchingPets.filter((pet) => pet.gender === gender);
       }
 
     return matchingPets;
@@ -132,7 +132,7 @@ const pets = [
   export function updatePets(id, updateData) {
     const pet = retrievePetsById(id);
   
-    if (!pet) throw `Todo ${id} not found!`;
+    if (!pet) throw `Pet ${id} not found!`;
 
   
     Object.assign(todo, updateData);
@@ -142,8 +142,37 @@ const pets = [
 
   export function deletePet(id) {
   
-    const index = pets.indexOf((t) => t.id == id);
+    const index = pets.findIndex((t) => t.id == id);
     if (index >= 0) pets.splice(index, 1);
   }
 
-  
+  export function createAdoption(userName, petId){
+    const pet = retrievePetsById(petId); 
+
+    if (!pet) throw new Error(`Pet with id ${petId} not found.`);
+    if (pet.isAdopted) throw new Error(`Pet with id ${petId} is already adopted.`);
+
+    pet.isAdopted = true; 
+
+    const newAdoption = {
+      id: adoptions.length + 1,
+      date: new Date().toISOString().split('T')[0],
+      userName,
+      petId
+    };
+
+    adoptions.push(newAdoption);
+    return newAdoption; 
+  }
+
+  export function retrieveAdoptionsById(id) {
+    return adoptions.find((adoption) => adoption.id == id);
+  }
+
+  export function retrieveAdoptionsByUser(userName) {
+    return adoptions.filter((adoption) => adoption.userName.toLowerCase() === userName.toLowerCase());
+  }
+
+  export function retrieveAdoptions() {
+    return adoptions;
+  }
