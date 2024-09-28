@@ -55,13 +55,13 @@ const pets = [
     {
       id: 1,
       date: '2023-09-29',
-      userName: 'John Doe',
+      userName: 'JohnDoe',
       petId: 1
     },
     {
       id: 2,
       date: '2023-09-30',
-      userName: 'Jane Smith',
+      userName: 'JaneSmith',
       petId: 2
     }
   ];
@@ -170,8 +170,14 @@ const pets = [
   }
 
   export function retrieveAdoptionsByUser(userName) {
-    return adoptions.filter((adoption) => adoption.userName.toLowerCase() === userName.toLowerCase());
+    if (!userName) {
+      throw new Error('userName is required');
+    }
+    return adoptions.filter(adoption => 
+      adoption.userName && adoption.userName.toLowerCase() === userName.toLowerCase()
+    );
   }
+  
 
   export function retrieveAdoptions() {
     return adoptions;
